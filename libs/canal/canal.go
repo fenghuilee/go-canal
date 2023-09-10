@@ -31,7 +31,7 @@ type TCanal struct {
 func (c *TCanal) Run() {
 	c.Handler.Handle()
 
-	positionFile := filepath.Join(sys_util.CurrentDirectory(), "position.json")
+	positionFile := filepath.Join(sys_util.CurrentDirectory(), "runtime", "position.json")
 	if file_util.IsExist(positionFile) {
 		var position mysql.Position
 		var positionJson []byte
