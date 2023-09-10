@@ -18,7 +18,7 @@ func InitConfigFile(configFile string) error {
 		configFile = filepath.Join(sys_util.CurrentDirectory(), configFile)
 	}
 	if !file_util.IsExist(configFile) {
-		return errors.New("config file_util not found")
+		return errors.New("config file not found")
 	}
 	var data []byte
 	var err error
