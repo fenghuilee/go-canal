@@ -47,7 +47,7 @@ func Init() {
 	luaProtos = make(map[string]*lua.FunctionProto, len(Config.Rules))
 	for _, config := range Config.Rules {
 		if err := config.Compile(); err != nil {
-			panic(errors.Trace(err))
+			log.Panic(errors.Trace(err).Error())
 			os.Exit(1)
 		}
 		config.LuaProto = luaProtos[config.LuaPath]

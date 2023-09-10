@@ -2,10 +2,13 @@ package canal
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-mysql-org/go-mysql/canal"
 	"github.com/go-mysql-org/go-mysql/mysql"
+	"github.com/pingcap/errors"
 	"go-canal/libs/canal/canal_handler"
 	"go-canal/libs/log"
+	"go-canal/libs/lua/lua_rule"
 	"go-canal/utils/file_util"
 	"go-canal/utils/sys_util"
 	"os"
@@ -68,13 +71,14 @@ func Init() *TCanal {
 	config.Password = Config.Canal.Password
 	config.Charset = Config.Canal.Charset
 	config.Flavor = Config.Canal.Flavor
+	luaRulesIncludeTableRegex()
 	config.IncludeTableRegex = Config.Canal.IncludeTableRegex
 	config.ExcludeTableRegex = Config.Canal.ExcludeTableRegex
 	config.Dump.ExecutionPath = ""
 	config.Logger = log.Logger
 	_canal, err := canal.NewCanal(config)
 	if err != nil {
-		panic(err)
+		log.Panic(errors.Trace(err).Error())
 		os.Exit(1)
 	}
 	Canal = &TCanal{
@@ -84,4 +88,15 @@ func Init() *TCanal {
 	}
 	Canal.SetEventHandler(Canal.Handler)
 	return Canal
+}
+
+func luaRulesIncludeTableRegex() {
+	includeTableRegex := ""
+	for _, rule := range lua_rule.Rules {
+		if rule.Schema == "*" && rule.Table == "*" {
+			continue
+		}
+		includeTableRegex = fmt.Sprintf("%s\\.%s", rule.Schema, rule.Table)
+		Config.Canal.IncludeTableRegex = append(Config.Canal.IncludeTableRegex, includeTableRegex)
+	}
 }
