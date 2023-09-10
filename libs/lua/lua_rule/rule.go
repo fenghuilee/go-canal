@@ -29,7 +29,7 @@ var Config = &struct {
 }{
 	Rules: make([]*TRule, 0),
 }
-var Rules = TRules{}
+var Rules = make(TRules)
 
 var luaProtos map[string]*lua.FunctionProto
 
@@ -60,7 +60,7 @@ func Init() {
 				LuaProto:    config.LuaProto,
 				LuaFunction: config.LuaFunction,
 			}
-			key := fmt.Sprintf("%s.%s", config.Schema, config.Table)
+			key := fmt.Sprintf("%s.%s", config.Schema, table)
 			Rules[key] = rule
 			log.Infof("Rule #%d: %s.%s -> %s", index+1, rule.Schema, rule.Table, rule.LuaPath)
 		}
