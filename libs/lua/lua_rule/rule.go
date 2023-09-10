@@ -45,6 +45,7 @@ func Init() {
 		c += len(strings.Split(config.Table, ","))
 	}
 	luaProtos = make(map[string]*lua.FunctionProto, len(Config.Rules))
+	index := 1
 	for _, config := range Config.Rules {
 		if err := config.Compile(); err != nil {
 			log.Panic(errors.Trace(err).Error())
@@ -52,7 +53,7 @@ func Init() {
 		}
 		config.LuaProto = luaProtos[config.LuaPath]
 		tables := strings.Split(config.Table, ",")
-		for index, table := range tables {
+		for _, table := range tables {
 			rule := &TRule{
 				Schema:      config.Schema,
 				Table:       table,
@@ -62,7 +63,8 @@ func Init() {
 			}
 			key := fmt.Sprintf("%s.%s", config.Schema, table)
 			Rules[key] = rule
-			log.Infof("Rule #%d: %s.%s -> %s", index+1, rule.Schema, rule.Table, rule.LuaPath)
+			log.Infof("Rule #%d: %s.%s -> %s", index, rule.Schema, rule.Table, rule.LuaPath)
+			index++
 		}
 	}
 }
