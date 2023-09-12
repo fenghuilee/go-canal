@@ -30,7 +30,6 @@ var Logger = logrus.New()
 func init() {
 	Logger.Out = os.Stdout
 	formatter := Logger.Formatter.(*logrus.TextFormatter)
-	formatter.ForceColors = true
 	formatter.FullTimestamp = true
 	formatter.TimestampFormat = "2006-01-02 15:04:05"
 }

@@ -10,6 +10,7 @@ import (
 
 var (
 	configFile string
+	isColor    bool
 )
 
 func init() {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/pingcap/errors"
+	"github.com/sirupsen/logrus"
 	"go-canal/libs/canal"
 	"go-canal/libs/log"
 	"go-canal/libs/lua/lua_rule"
@@ -13,7 +14,7 @@ import (
 	"strings"
 )
 
-func InitConfigFile(configFile string) error {
+func InitConfigFile() error {
 	if !strings.HasPrefix(configFile, "/") {
 		configFile = filepath.Join(sys_util.CurrentDirectory(), configFile)
 	}
@@ -48,5 +49,6 @@ func InitConfig() {
 		log.Config.Logger.Level = "info"
 	}
 	log.SetLevel(log.Config.Logger.Level)
+	log.Logger.Formatter.(*logrus.TextFormatter).ForceColors = isColor
 	log.Infof("Canal (%s, %s)", canal.Config.Canal.Addr, canal.Config.Canal.User)
 }

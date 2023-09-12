@@ -11,9 +11,10 @@ import (
 )
 
 func init() {
-	flag.StringVar(&configFile, "config", "config.yml", "application config file_util")
+	flag.StringVar(&configFile, "config", "config.yml", "application config file")
+	flag.BoolVar(&isColor, "color", false, "outputting colors")
 	flag.Parse()
-	if err := InitConfigFile(configFile); err != nil {
+	if err := InitConfigFile(); err != nil {
 		log.Panic(errors.Trace(err).Error())
 		os.Exit(1)
 	}
