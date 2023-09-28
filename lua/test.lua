@@ -6,8 +6,8 @@
 
 json              = require('json')
 sql               = require('sql')
-dsn               = require("lua.lib.dsn")
-mysql             = require("lua.lib.mysql")
+dsn               = require('lua.lib.dsn')
+mysql             = require('lua.lib.mysql')
 
 local canal       = require('canal')
 local _action     = canal.rawAction()
