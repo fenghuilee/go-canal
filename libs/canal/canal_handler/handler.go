@@ -2,6 +2,7 @@ package canal_handler
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/go-mysql-org/go-mysql/canal"
 	"github.com/go-mysql-org/go-mysql/mysql"
@@ -11,6 +12,7 @@ import (
 	"go-canal/libs/log"
 	"go-canal/libs/lua"
 	"go-canal/libs/lua/lua_rule"
+	"go-canal/utils/string_util"
 	"go-canal/utils/sys_util"
 	"os"
 	"path/filepath"
@@ -129,7 +131,8 @@ func (h *TEventHandler) save(pos mysql.Position) {
 		log.Warnf("Position json marshal failed: %s", errors.Trace(err).Error())
 		return
 	}
-	positionFile := filepath.Join(sys_util.CurrentDirectory(), "runtime", "position.json")
+	ConfigFileMD5 := string_util.MD5(flag.Lookup("config").Value.String())
+	positionFile := filepath.Join(sys_util.CurrentDirectory(), "runtime", ConfigFileMD5+".position.json")
 	log.Infof("Position (Name: %s, Pos: %d) saving to %s", pos.Name, pos.Pos, positionFile)
 	if err = os.WriteFile(positionFile, positionJson, os.ModePerm); err != nil {
 		log.Warnf("Position save failed: %s", errors.Trace(err).Error())

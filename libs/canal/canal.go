@@ -2,6 +2,7 @@ package canal
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/go-mysql-org/go-mysql/canal"
 	"github.com/go-mysql-org/go-mysql/mysql"
@@ -10,6 +11,7 @@ import (
 	"go-canal/libs/log"
 	"go-canal/libs/lua/lua_rule"
 	"go-canal/utils/file_util"
+	"go-canal/utils/string_util"
 	"go-canal/utils/sys_util"
 	"os"
 	"path/filepath"
@@ -34,7 +36,8 @@ type TCanal struct {
 func (c *TCanal) Run() {
 	c.Handler.Handle()
 
-	positionFile := filepath.Join(sys_util.CurrentDirectory(), "runtime", "position.json")
+	ConfigFileMD5 := string_util.MD5(flag.Lookup("config").Value.String())
+	positionFile := filepath.Join(sys_util.CurrentDirectory(), "runtime", ConfigFileMD5+".position.json")
 	if file_util.IsExist(positionFile) {
 		var position mysql.Position
 		var positionJson []byte
